@@ -164,6 +164,7 @@ if calculate_button:
         optimal_bucket = select_optimal_bucket(user_data, bucket_data, swl)
     
         if optimal_bucket:
+            st.success(f"Good News! Your machine can upgrade to an XMOR® bucket!
             st.success(f"Your ONTRAC XMOR® Bucket Solution is the: {optimal_bucket['bucket_name']} ({optimal_bucket['bucket_size']} m³)")
             st.write(f"Total Suspended Load: {optimal_bucket['total_bucket_weight']} kg")
             st.write(f"{user_data['make']} {user_data['model']} Safe Working Load at {user_data['reach']}m: {swl} kg")
