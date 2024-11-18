@@ -111,7 +111,6 @@ def calculate_bucket_load(bucket_size, material_density):
     return bucket_size * material_density
 
 def select_optimal_bucket(user_data, bucket_data, swl):
-    current_bucket_size = user_data['current_bucket_size']
     optimal_bucket = None
     highest_bucket_size = 0
 
