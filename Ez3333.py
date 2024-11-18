@@ -164,15 +164,15 @@ if calculate_button:
         optimal_bucket = select_optimal_bucket(user_data, bucket_data, swl)
     
         if optimal_bucket:
-            st.success(f"Good News! Your machine can upgrade to an XMOR® bucket!
+            st.success(f"Great News! Your machine can upgrade to an XMOR® bucket!")
             st.success(f"Your ONTRAC XMOR® Bucket Solution is the: {optimal_bucket['bucket_name']} ({optimal_bucket['bucket_size']} m³)")
-            st.write(f"Total Suspended Load: {optimal_bucket['total_bucket_weight']} kg")
-            st.write(f"{user_data['make']} {user_data['model']} Safe Working Load at {user_data['reach']}m: {swl} kg")
+            st.write(f"XMOR® Bucket Total Suspended Load: {optimal_bucket['total_bucket_weight']} kg")
+            st.write(f"{user_data['make']} {user_data['model']}: Safe Working Load at {user_data['reach']}m reach: {swl} kg")
+            st.write(f"Calculations based on: {user_data}"
 
             # Show table
             new_capacity = optimal_bucket['bucket_size']
             new_payload = calculate_bucket_load(new_capacity, user_data['material_density'])
-    
             # Total suspended load
             new_total_load = optimal_bucket['total_bucket_weight']  # Corrected variable
 
