@@ -137,16 +137,8 @@ def select_optimal_bucket(user_data, bucket_data, swl):
 
     return optimal_bucket
 
-
-
-# Find matching SWL and optimal bucket
-# Add a "Calculate" button
-calculate_button = st.button("Calculate")
-
-# Run calculations only when the button is pressed
-if calculate_button:
     # Get user input data
-    user_data = {
+user_data = {
     'make': excavator_make,
     'model': excavator_model,
     'boom_length': boom_length,
@@ -157,6 +149,14 @@ if calculate_button:
     'material_density': material_density,
     'quick_hitch_weight': quick_hitch_weight,
 }
+
+# Find matching SWL and optimal bucket
+# Add a "Calculate" button
+calculate_button = st.button("Calculate")
+
+# Run calculations only when the button is pressed
+if calculate_button:
+
     swl = find_matching_swl(user_data)
     if swl:
         # Load selected bucket data
