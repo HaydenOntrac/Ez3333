@@ -52,7 +52,7 @@ def app():
     st.write("Copyright © ONTRAC Group Pty Ltd 2024.")
 
 # Streamlit UI
-st.title("ONTRAC XMOR® Bucket Sizing Tool")
+st.title("ONTRAC XMOR® Bucket Selector")
 st.write("To discover a bucket selected just for you, please enter your excavator details below.")
 st.title("\n\nExcavator Selection")
 
