@@ -85,7 +85,7 @@ reach = st.selectbox("Select Reach (m)", filtered_data_shoe['reach'].unique())
 material_density = st.number_input("Material Density (kg/m³)     e.g. 1500", min_value=0.0)
 
 quick_hitch = st.checkbox("My Machine Uses a Quick Hitch")
-if quick_hitch 
+if quick_hitch:
 quick_hitch_weight = st.number_input("Quick Hitch Weight (kg)", min_value=0.0)
 
 # Checkbox for BHC buckets
