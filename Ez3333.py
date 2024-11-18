@@ -168,7 +168,7 @@ if calculate_button:
             st.success(f"Your ONTRAC XMOR® Bucket Solution is the: {optimal_bucket['bucket_name']} ({optimal_bucket['bucket_size']} m³)")
             st.write(f"XMOR® Bucket Total Suspended Load: {optimal_bucket['total_bucket_weight']} kg")
             st.write(f"{user_data['make']} {user_data['model']}: Safe Working Load at {user_data['reach']}m reach: {swl} kg")
-            st.write(f"Calculations based on: {user_data}")
+            st.write(f"Calculations based on the {user_data['make']} {user_data['model']} with a {user_data['boom_length']}m boom, {user_data['arm_length']}m arm, {user_data['cwt']}kg counterweight, {user_data['shoe_width']}mm shoes, operating at a reach of {user_data['reach']}m, and with a material density of {user_data['material_density']}kg/m³")
 
             # Show table
             new_capacity = optimal_bucket['bucket_size']
