@@ -82,22 +82,11 @@ shoe_width = st.selectbox("Select Shoe Width (mm)", filtered_data_cwt['shoe_widt
 filtered_data_shoe = filtered_data_cwt[filtered_data_cwt['shoe_width'] == shoe_width]
 reach = st.selectbox("Select Reach (m)", filtered_data_shoe['reach'].unique())
 
-# Dump truck inputs
-st.title("Dump Truck Selection")
-truck_brand = st.selectbox("Select Dump Truck Brand", dump_truck_data['brand'].unique())
-truck_type = st.selectbox("Select Dump Truck Type", dump_truck_data[dump_truck_data['brand'] == truck_brand]['type'].unique())
-truck_model = st.selectbox("Select Dump Truck Model", dump_truck_data[(dump_truck_data['brand'] == truck_brand) & 
-                                                                     (dump_truck_data['type'] == truck_type)]['model'].unique())
-truck_payload = st.selectbox("Select Dump Truck Payload (tons)", dump_truck_data[dump_truck_data['model'] == truck_model]['payload'].unique())
-
-# Additional Inputs
-
-st.title("Additional Information")
 material_density = st.number_input("Material Density (kg/m³)     e.g. 1500", min_value=0.0)
-quick_hitch_weight = st.number_input("Quick Hitch Weight (kg)     Leave as 0 for direct pin", min_value=0.0)
-current_bucket_size = st.number_input("Current Bucket Size (m³)", min_value=0.0)
-current_bucket_weight = st.number_input("Current Bucket Weight (kg)", min_value=0.0)
-machine_swings_per_minute = st.number_input("Machine Swings per Minute", min_value=0.0)
+
+quick_hitch = st.checkbox("My Machine Uses a Quick Hitch")
+if quick_hitch 
+quick_hitch_weight = st.number_input("Quick Hitch Weight (kg)", min_value=0.0)
 
 # Checkbox for BHC buckets
 select_bhc = st.checkbox("Select from BHC buckets only (Heavy Duty)")
