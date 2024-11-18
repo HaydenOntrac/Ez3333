@@ -148,10 +148,6 @@ user_data = {
     'reach': reach,
     'material_density': material_density,
     'quick_hitch_weight': quick_hitch_weight,
-    'current_bucket_size': current_bucket_size,
-    'current_bucket_weight': current_bucket_weight,
-    'dump_truck_payload': truck_payload,
-    'machine_swings_per_minute': machine_swings_per_minute
 }
 
 # Find matching SWL and optimal bucket
@@ -169,151 +165,17 @@ if calculate_button:
         optimal_bucket = select_optimal_bucket(user_data, bucket_data, swl)
     
         if optimal_bucket:
-            st.success(f"Good news! ONTRAC could improve your productivity!")
             st.success(f"Your ONTRAC XMOR® Bucket Solution is the: {optimal_bucket['bucket_name']} ({optimal_bucket['bucket_size']} m³)")
             st.write(f"Total Suspended Load: {optimal_bucket['total_bucket_weight']} kg")
             st.write(f"{user_data['make']} {user_data['model']} Safe Working Load at {user_data['reach']}m: {swl} kg")
 
             # Show table
-            old_capacity = user_data['current_bucket_size']
             new_capacity = optimal_bucket['bucket_size']
-            old_payload = calculate_bucket_load(old_capacity, user_data['material_density'])
             new_payload = calculate_bucket_load(new_capacity, user_data['material_density'])
     
-            dump_truck_payload = user_data['dump_truck_payload'] * 1000
-            machine_swings_per_minute = user_data['machine_swings_per_minute']
-    
             # Total suspended load
-            old_total_load = old_payload + user_data['current_bucket_weight'] + user_data['quick_hitch_weight']
             new_total_load = optimal_bucket['total_bucket_weight']  # Corrected variable
-    
-    
-            # Adjust payload to achieve whole or near-whole swings for the new payload
-            swings_to_fill_truck_new = dump_truck_payload / new_payload
-            swings_to_fill_truck_old = dump_truck_payload / old_payload
-    
-            # Time to fill truck in minutes
-            time_to_fill_truck_old = swings_to_fill_truck_old / machine_swings_per_minute
-            time_to_fill_truck_new = swings_to_fill_truck_new / machine_swings_per_minute
-    
-            # Average number of trucks per hour at 75% efficiency
-            avg_trucks_per_hour_old = (60 / time_to_fill_truck_old) * 0.75 if time_to_fill_truck_old > 0 else 0
-            avg_trucks_per_hour_new = (60 / time_to_fill_truck_new) * 0.75 if time_to_fill_truck_new > 0 else 0
-    
-            # Swings per hour
-            swings_per_hour_old = swings_to_fill_truck_old * avg_trucks_per_hour_old
-            swings_per_hour_new = swings_to_fill_truck_new * avg_trucks_per_hour_new
-    
-            # Total swings per hour
-            total_swings_per_hour = 60 * machine_swings_per_minute
 
-            # Truck Tonnes per hour
-            truck_tonnage_per_hour_old = swings_per_hour_old * old_capacity * user_data['material_density'] / 1000
-            truck_tonnage_per_hour_new = swings_per_hour_new * new_capacity * user_data['material_density'] / 1000
-    
-            # Production (t/hr)
-            total_tonnage_per_hour_old = total_swings_per_hour * old_capacity * user_data['material_density'] / 1000
-            total_tonnage_per_hour_new = total_swings_per_hour * new_capacity * user_data['material_density'] / 1000
-    
-            # Production (t/hr)
-            tonnage_per_hour_old = avg_trucks_per_hour_old * dump_truck_payload / 1000
-            tonnage_per_hour_new = avg_trucks_per_hour_new * dump_truck_payload / 1000
-    
-            # Assuming 1800 swings in a day
-            total_m3_per_day_old = 1000 * old_capacity
-            total_m3_per_day_new = 1000 * new_capacity
-    
-            # Total tonnage per day
-            total_tonnage_per_day_old = total_m3_per_day_old * user_data['material_density'] / 1000
-            total_tonnage_per_day_new = total_m3_per_day_new * user_data['material_density'] / 1000
-    
-            # Total number of trucks per day
-            total_trucks_per_day_old = total_tonnage_per_day_old / dump_truck_payload * 1000
-            total_trucks_per_day_new = total_tonnage_per_day_new / dump_truck_payload * 1000
-
-            Productivity = f"{(1.1 * total_tonnage_per_hour_new - total_tonnage_per_hour_old) / total_tonnage_per_hour_old * 100:.0}%"
-    
-            # Create a DataFrame for the comparison table
-            data = {
-            'Description': [
-                'Side-By-Side Bucket Comparison', 'Capacity (m³)', 'Material Density (kg/m³)', 'Bucket Payload (kg)', 
-                'Total Suspended Load (kg)', '', 
-                'Loadout Productivity & Truck Pass Simulation', 'Dump Truck Payload (kg)', 'Avg No. Swings to Fill Truck', 
-                'Time to Fill Truck (min)', 'Avg Trucks/Hour @ 75% eff', 'Swings/Hour', 'Tonnes/Hour', '', 
-                '1000 Swings Side-By-Side Simulation','Number of Swings', 'Tonnes/hr', 'Total Volume (m³)', 
-                'Total Tonnes', 'Total Trucks', '', 
-                '10% Improved Cycle Time Simulation','Number of Swings', 'Tonnes/hr', 'Total Volume (m³)', 
-                'Total Tonnes', 'Total Trucks'
-            ],
-            'Old Bucket': [
-                '', f"{old_capacity:.1f}", f"{user_data['material_density']:.0f}", f"{old_payload:.0f}", 
-                f"{old_total_load:.0f}", '', 
-                '', f"{dump_truck_payload:.0f}", f"{swings_to_fill_truck_old:.1f}", 
-                f"{time_to_fill_truck_old:.1f}", f"{avg_trucks_per_hour_old:.1f}", f"{swings_per_hour_old:.0f}", f"{truck_tonnage_per_hour_old:.0f}", '', '', 
-                '1000', f"{total_tonnage_per_hour_old:.0f}", f"{total_m3_per_day_old:.0f}", 
-                f"{total_tonnage_per_day_old:.0f}", f"{total_trucks_per_day_old:.0f}", '', '',
-                '1000', f"{total_tonnage_per_hour_old:.0f}", f"{total_m3_per_day_old:.0f}", 
-                f"{total_tonnage_per_day_old:.0f}", f"{total_trucks_per_day_old:.0f}"
-            ],
-            'New Bucket': [
-                '', f"{new_capacity:.1f}", f"{user_data['material_density']:.0f}", f"{new_payload:.0f}", 
-                f"{new_total_load:.0f}", '', 
-                '', f"{dump_truck_payload:.0f}", f"{swings_to_fill_truck_new:.1f}", 
-                f"{time_to_fill_truck_new:.1f}", f"{avg_trucks_per_hour_new:.1f}", f"{swings_per_hour_new:.0f}", f"{truck_tonnage_per_hour_new:.0f}", '', '',
-                '1000', f"{total_tonnage_per_hour_new:.0f}", f"{total_m3_per_day_new:.0f}", 
-                f"{total_tonnage_per_day_new:.0f}", f"{total_trucks_per_day_new:.0f}", '', '',
-                '1100', f"{1.1 * total_tonnage_per_hour_new:.0f}", f"{1.1 * total_m3_per_day_new:.0f}", 
-                f"{1.1 * total_tonnage_per_day_new:.0f}", f"{1.1 * total_trucks_per_day_new:.0f}"
-            ],
-            'Difference': [
-                '', f"{new_capacity - old_capacity:.1f}", '-', f"{new_payload - old_payload:.0f}", 
-                f"{new_total_load - old_total_load:.0f}", '', 
-                '', '-', f"{swings_to_fill_truck_new - swings_to_fill_truck_old:.1f}", 
-                f"{time_to_fill_truck_new - time_to_fill_truck_old:.1f}", 
-                f"{avg_trucks_per_hour_new - avg_trucks_per_hour_old:.1f}", 
-                f"{swings_per_hour_new - swings_per_hour_old:.0f}", 
-                f"{truck_tonnage_per_hour_new - truck_tonnage_per_hour_old:.0f}", 
-                '', '', '-',f"{total_tonnage_per_hour_new - total_tonnage_per_hour_old:.0f}", 
-                f"{total_m3_per_day_new - total_m3_per_day_old:.0f}", 
-                f"{total_tonnage_per_day_new - total_tonnage_per_day_old:.0f}", 
-                f"{total_trucks_per_day_new - total_trucks_per_day_old:.0f}", '', 
-                '', '100', f"{1.1 * total_tonnage_per_hour_new - total_tonnage_per_hour_old:.0f}", 
-                f"{1.1 * total_m3_per_day_new - total_m3_per_day_old:.0f}", 
-                f"{1.1 * total_tonnage_per_day_new - total_tonnage_per_day_old:.0f}", 
-                f"{1.1 * total_trucks_per_day_new - total_trucks_per_day_old:.0f}"
-            ],
-            '% Difference': [
-                '', f"{(new_payload - old_payload) / old_payload * 100:.0f}%", '-', f"{(new_payload - old_payload) / old_payload * 100:.0f}%", 
-                f"{(new_total_load - old_total_load) / old_total_load * 100:.0f}%", '', 
-                '', '-', f"{(swings_to_fill_truck_new - swings_to_fill_truck_old) / swings_to_fill_truck_old * 100:.0f}%", 
-                f"{(time_to_fill_truck_new - time_to_fill_truck_old) / time_to_fill_truck_old * 100:.0f}%", 
-                f"{(avg_trucks_per_hour_new - avg_trucks_per_hour_old) / avg_trucks_per_hour_old * 100:.0f}%",
-                f"{(swings_per_hour_new - swings_per_hour_old) / swings_per_hour_old * 100:.0f}%", 
-                f"{(truck_tonnage_per_hour_new - truck_tonnage_per_hour_old) / truck_tonnage_per_hour_old * 100:.0f}%", 
-                '', 
-                '','-', f"{(total_tonnage_per_hour_new - total_tonnage_per_hour_old) / total_tonnage_per_hour_old * 100:.0f}%", 
-                f"{(total_m3_per_day_new - total_m3_per_day_old) / total_m3_per_day_old * 100:.0f}%", 
-                f"{(total_tonnage_per_day_new - total_tonnage_per_day_old) / total_tonnage_per_day_old * 100:.0f}%", 
-                f"{(total_trucks_per_day_new - total_trucks_per_day_old) / total_trucks_per_day_old * 100:.0f}%", '', 
-                '','10%', f"{(1.1 * total_tonnage_per_hour_new - total_tonnage_per_hour_old) / total_tonnage_per_hour_old * 100:.0f}%", 
-                f"{(1.1 * total_m3_per_day_new - total_m3_per_day_old) / total_m3_per_day_old * 100:.0f}%", 
-                f"{(1.1 * total_tonnage_per_day_new - total_tonnage_per_day_old) / total_tonnage_per_day_old * 100:.0f}%", 
-                f"{(1.1 * total_trucks_per_day_new - total_trucks_per_day_old) / total_trucks_per_day_old * 100:.0f}%"
-            ]
-        }
-            
-            df = pd.DataFrame(data)
-            
-            if df is not None:
-                st.title('Bucket Sizing and Productivity Calculator')
-                st.dataframe(df)
-                excel_file = generate_excel(df)
-                st.download_button(
-                    label="Download Results In Excel",
-                    data=excel_file,
-                    file_name="productivity_study.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
         else:
             st.write("No suitable bucket found within SWL limits.")
     else:
