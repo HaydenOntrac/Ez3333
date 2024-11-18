@@ -52,8 +52,9 @@ def app():
     st.write("Copyright © ONTRAC Group Pty Ltd 2024.")
 
 # Streamlit UI
-st.title("ONTRAC XMOR® Bucket Solution\n\n")
+st.title("ONTRAC XMOR® Bucket Sizing Tool\n\n")
 st.title("Excavator Selection")
+st.write("To discover a bucket selected just for you, please enter your excavator details below.")
 
 # Step 1: Select Excavator Make
 excavator_make = st.selectbox("Select Excavator Make", swl_data['make'].unique())
